@@ -1,0 +1,60 @@
+﻿@model MockCMS.ViewModels.ManageItemTypesModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ManageItemTypes</title>
+</head>
+<body>
+    <script src="@Url.Content("~/Scripts/jquery-1.6.2.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/knockout-2.0.0.js")"></script>
+    @using (Html.BeginForm()) {
+        @Html.ValidationSummary(true)
+    
+        <fieldset>
+            <legend>Manage Item Types</legend>
+            <ul data-bind="foreach: itemTypes">
+                <li>
+                    <input type="text" data-bind="value: name" />
+                    <p>Properties: </p>
+                    <ul data-bind="foreach: properties">
+                        <li>
+                            <input type="text" data-bind="value: name" />
+                            <select data-bind="value: propertyType">
+                                <option value="0">Number</option>
+                                <option value="1">Text</option>
+                            </select>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <p>
+                <button data-bind="click: createItem">Create Item Type</button>
+                <input type="submit" value="Save" />
+            </p>
+        </fieldset>
+    }
+    
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+    <script> 
+        
+        var ManageItemTypesModel = function() {
+            this.itemTypes = ko.observableArray();
+            this.createItem = function () {
+                this.itemTypes.push({ name: "", properties: [{ name: "", propertyType: 0 }]});
+            };
+        };
+        ko.applyBindings(new ManageItemTypesModel());
+    </script>
+</body>
+</html>
