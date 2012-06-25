@@ -17,6 +17,7 @@
         @foreach (var site in Model.Sites)
         {
             <header> <a href="@Url.Action( "ViewSite", new { id = site.GetId().ToString() } )">@(site.Name) </a></header>
+            <a href="@Url.Action("ManageSite", new { id = site.GetId().ToString()})">Manage</a>
         }
     </div>
     <a href="@Url.Action("Create", "MockSite")">Create a new site</a>

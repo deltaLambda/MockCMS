@@ -23,14 +23,18 @@
             <legend>Manage Item Types</legend>
             <ul data-bind="foreach: itemTypes">
                 <li>
-                    <input type="text" data-bind="value: name" />
+                    @Html.LabelFor( model => model.ItemTypes[0].Name)
+                    <input type="text" data-bind="value: Name, attr: { name: 'ItemTypes_' + length + '__Name' }" />
                     <p>Properties: </p>
-                    <ul data-bind="foreach: properties">
+                    <ul data-bind="foreach: Properties">
                         <li>
-                            <input type="text" data-bind="value: name" />
-                            <select data-bind="value: propertyType">
-                                <option value="0">Number</option>
-                                <option value="1">Text</option>
+                            @Html.LabelFor(model => model.ItemTypes[0].Properties[0].Name)
+                            <input type="text" data-bind="value: Name" />
+                            <select data-bind="value: PropertyType, attr: { name: 'ItemTypes_' + Index + '__Properties_' + length + '__Name' }">
+                                @foreach (var itemPropertyType in Model.ItemPropertyTypes)
+                                {
+                                    <option value="@itemPropertyType.GetId()">@itemPropertyType.Name</option>        
+                            }
                             </select>
                         </li>
                     </ul>
@@ -46,12 +50,11 @@
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
-    <script> 
-        
+    <script>        
         var ManageItemTypesModel = function() {
             this.itemTypes = ko.observableArray();
             this.createItem = function () {
-                this.itemTypes.push({ name: "", properties: [{ name: "", propertyType: 0 }]});
+                this.itemTypes.push({ Name: "", Properties: [{ Name: "", PropertyType: 0, Index: this.itemTypes().length }]});
             };
         };
         ko.applyBindings(new ManageItemTypesModel());

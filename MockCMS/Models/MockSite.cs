@@ -4,17 +4,23 @@ using System.Linq;
 
 namespace MockCMS.Models
 {
-    public class MockSite : Model, IMockSite
+    public class MockSite : Model
     {
-        public MockSite(Guid _id)
+        public MockSite()
+            : base()
+        {
+            ItemTypes = new List<ItemType>();
+            ItemPropertyTypes = new List<ItemPropertyType>();
+        }
+        public MockSite(int _id)
             : base(_id)
         {
-            DataViews = new List<IDataView>();
-            ItemTypes = new List<IItemType>();
+            ItemTypes = new List<ItemType>();
+            ItemPropertyTypes = new List<ItemPropertyType>();
         }
 
-        public IList<IDataView> DataViews { get; set; }
+        public IList<ItemType> ItemTypes { get; set; }
 
-        public IList<IItemType> ItemTypes { get; set; }
+        public IList<ItemPropertyType> ItemPropertyTypes { get; set; }
     }
 }

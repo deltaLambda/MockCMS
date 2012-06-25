@@ -5,13 +5,13 @@ using System.Web;
 
 namespace MockCMS.Models
 {
-    public class ItemType : Model,  IItemType
+    public class ItemType : Model
     {
-        public ItemType(Guid _id) : base(_id)
+        public ItemType(int _id) : base(_id)
         {
-            Properties = new Dictionary<string,IItemPropertyType>();
+            Properties = new Dictionary<string,ItemPropertyType>();
         }
-        public IDictionary<string, IItemPropertyType> Properties { get; set; }
+        public IDictionary<string, ItemPropertyType> Properties { get; set; }
 
     }
 }

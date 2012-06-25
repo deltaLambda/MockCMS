@@ -5,9 +5,9 @@ using System.Web;
 
 namespace MockCMS.Models
 {
-    public class ItemPropertyType : Model, IItemPropertyType   
+    public class ItemPropertyType : Model
     {
-        public ItemPropertyType(Guid _id)
+        public ItemPropertyType(int _id)
             : base(_id)
         { }
     }

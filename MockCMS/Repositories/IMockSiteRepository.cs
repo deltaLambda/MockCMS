@@ -9,9 +9,9 @@ namespace MockCMS.Repositories
 {
     public interface IMockSiteRepository : IRepository
     {
-        IMockSite GetSite(Guid id);
-        void AddSite(CreateSiteModel newSiteValues);
-        void RemoveSite(Guid id);
-        IList<IMockSite> GetAllSites();
+        MockSite GetSite(int id);
+        void AddSite(MockSite newSite);
+        void RemoveSite(int id);
+        IList<MockSite> GetAllSites();
     }
 }

@@ -6,15 +6,22 @@ using System.Web;
 
 namespace MockCMS.ViewModels
 {
-    public class ManageItemTypesModel
+    public class UpdateSiteModel
     {
-        public ManageItemTypesModel(Guid _siteId)
+        public UpdateSiteModel(int id)
         {
-            SiteId = _siteId;
+            Id = id;
             ItemTypes = new List<ItemTypeEditModel>();
+            PropertyTypes = new List<ItemPropertyTypeModel>();
         }
+        public int Id { get; set; }
+            
+        [Required]
+        public string Name { get; set; }
+
         public IList<ItemTypeEditModel> ItemTypes { get; set; }
-        public Guid SiteId { get; private set; }
+
+        public IList<ItemPropertyTypeModel> PropertyTypes { get; set; }
     }
     public class ItemTypeEditModel
     {
@@ -22,15 +29,20 @@ namespace MockCMS.ViewModels
         {
             Properties = new List<ItemPropertyEditModel>();
         }
-        [Required]
+        public int Id { get; set; }
         public string Name { get; set; }
-
         public IList<ItemPropertyEditModel> Properties { get; set; }
     }
+
     public class ItemPropertyEditModel
     {
-        [Required]
-        public string Name { get; set ;}
+        public int Id { get; set; }
+        public string Name { get; set; }
         public int PropertyType { get; set; }
+    }
+    public class ItemPropertyTypeModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

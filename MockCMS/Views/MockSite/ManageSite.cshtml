@@ -1,0 +1,105 @@
+﻿@model MockCMS.ViewModels.ManageSiteModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Manage Site</title>
+    <link rel="stylesheet" href="~/Content/manage.css" type="text/css"/>
+    <script src="~/Scripts/jquery-1.6.2.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/knockout-2.0.0.js"></script>
+    <script src="~/Scripts/knockout.mapping-latest.js"></script>
+    <script src="~/Scripts/utils.js"></script>
+    <script>
+        $(function () {
+            var ItemTypeModel = function (options) {
+                var self = this;
+                self.Name = options.Name;
+                self.Properties = ko.mapping.fromJS(options.Properties);
+                self.AddProperty = function () {
+                    self.Properties.push({ Name: "", PropertyType: 0, Id : 0});
+                };
+                self.RemoveProperty = function (property) {
+                    self.Properties.remove(property);
+                };
+            };
+            var mapping = {
+                'ItemTypes': {
+                    create: function (options) {
+                        return new ItemTypeModel(options.data);
+                    }
+                }
+            };
+            var model = ko.mapping.fromJSON('@Html.Raw(Json.Encode(Model))', mapping);
+            model.AddItemType = function () {
+                model.ItemTypes.push( 
+                    new ItemTypeModel({ Properties: [], Name: "" })
+                );
+            };
+            model.RemoveItemType = function (itemType) {
+                model.ItemTypes.remove(itemType);
+            };
+            model.Save = function () {
+                var postValues = ko.mapping.toJSON(model);
+                $.postJSON("/api/mocksiteapi", postValues, function() { alert( "i posted crap");}, 'json');
+            };
+            ko.applyBindings(model);
+            window.model = model;
+        });
+    </script>
+</head>
+<body>
+
+    @using (Html.BeginForm()) {
+        @Html.ValidationSummary(true)
+    
+        <fieldset>
+            <legend>Manage Site</legend>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="editor-field">
+                <input type="text" data-bind="value: Name" />
+            </div>
+            <div class="editor-label">
+                <label for="ItemTypes">Item Types</label>
+            </div>
+            <div class="editor-field">
+                <ul data-bind="foreach: ItemTypes">
+                    <li>
+                        <label for="new-item-name">Item Name</label>
+                        <input type="text" name="new-item-name" data-bind="value: Name"></input>
+                        <ul data-bind="foreach: Properties">
+                            <li>
+                                <label for="new-property-name">Property Name</label>
+                                <input type="text" data-bind="value: Name" />
+                                <select data-bind="value: PropertyType, options:  $root.PropertyTypes, optionsText: function ( propertyType ) { return propertyType.Name;}">
+                                </select>
+                                <button data-bind="click: $parent.RemoveProperty">Remove</button>
+                            </li>
+                        </ul>
+                        <button data-bind="click: AddProperty">Add Property</button>
+
+                        <button data-bind="click: $parent.RemoveItemType">Remove Item Type</button>
+                    </li>
+                </ul>
+            </div>
+            <p>
+                <button data-bind="click: AddItemType">New Item Type</button>
+                <button data-bind="click: Save">Save</button>
+            </p>
+        </fieldset>
+    }
+    
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</body>
+</html>

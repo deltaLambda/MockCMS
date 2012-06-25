@@ -9,42 +9,30 @@ namespace MockCMS.Repositories
 {
     public class FakeMockSiteRepository : IMockSiteRepository
     {
-        private static readonly IList<IMockSite> sites;
+        private IList<MockSite> sites;
 
-        static FakeMockSiteRepository()
+        public FakeMockSiteRepository()
         {
-            if (sites == null)
-            {
-                sites = new List<IMockSite>();
-                for (int i = 1; i < 10; i++)
-                {
-                    IMockSite testSite = new MockSite(Guid.NewGuid());
-                    testSite.Name = "Test Site " + i.ToString();
-                    sites.Add(testSite);
-                }
-            }
-
+            sites = new List<MockSite>();
         }
-        public IMockSite GetSite(Guid id)
+        public MockSite GetSite(int id)
         {
             return sites.Where(site => site.GetId().Equals(id)).SingleOrDefault();
         }
 
-        public void AddSite(CreateSiteModel newSiteValues)
+        public void AddSite(MockSite newSite)
         {
-            IMockSite newSite = new MockSite(Guid.NewGuid());
-            newSite.Name = newSiteValues.Name;
             sites.Add(newSite);
         }
 
-        public void RemoveSite(Guid id)
+        public void RemoveSite(int id)
         {
             var siteToBeRemoved = sites.Where(site => site.GetId() == id).SingleOrDefault();
             if(siteToBeRemoved!=null)
                 sites.Remove(siteToBeRemoved);
         }
 
-        public IList<IMockSite> GetAllSites()
+        public IList<MockSite> GetAllSites()
         {
             return sites;
         }

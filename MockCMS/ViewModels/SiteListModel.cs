@@ -8,6 +8,6 @@ namespace MockCMS.ViewModels
 {
     public class SiteListModel
     {
-        public IList<IMockSite> Sites { get; set; }
+        public IList<MockSite> Sites { get; set; }
     }
 }

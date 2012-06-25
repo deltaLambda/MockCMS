@@ -5,11 +5,11 @@ using System.Web;
 
 namespace MockCMS.Models
 {
-    public class ItemProperty : Model,  IItemProperty
+    public class ItemProperty : Model
     {
-        public ItemProperty(Guid _id) : base(_id) { }
+        public ItemProperty(int _id) : base(_id) { }
         public string Value { get; set; }
 
-        public IItemPropertyType ItemPropertyType { get; set; }
+        public ItemPropertyType ItemPropertyType { get; set; }
     }
 }
