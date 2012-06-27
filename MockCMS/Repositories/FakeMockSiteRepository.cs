@@ -7,7 +7,7 @@ using MockCMS.ViewModels;
 
 namespace MockCMS.Repositories
 {
-    public class FakeMockSiteRepository : IMockSiteRepository
+    public class FakeMockSiteRepository : IRepository<MockSite>
     {
         private IList<MockSite> sites;
 
@@ -15,24 +15,25 @@ namespace MockCMS.Repositories
         {
             sites = new List<MockSite>();
         }
-        public MockSite GetSite(int id)
+        public MockSite Get(int id)
         {
             return sites.Where(site => site.GetId().Equals(id)).SingleOrDefault();
         }
 
-        public void AddSite(MockSite newSite)
+        public void Create(MockSite newSite)
         {
             sites.Add(newSite);
         }
 
-        public void RemoveSite(int id)
+        public void Delete(MockSite siteToBeRemoved)
         {
-            var siteToBeRemoved = sites.Where(site => site.GetId() == id).SingleOrDefault();
             if(siteToBeRemoved!=null)
                 sites.Remove(siteToBeRemoved);
         }
-
-        public IList<MockSite> GetAllSites()
+        public void Update(MockSite updatedSite)
+        {
+        }
+        public IList<MockSite> Get()
         {
             return sites;
         }

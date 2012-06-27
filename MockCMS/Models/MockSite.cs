@@ -11,6 +11,7 @@ namespace MockCMS.Models
         {
             ItemTypes = new List<ItemType>();
             ItemPropertyTypes = new List<ItemPropertyType>();
+            Pages = new List<MockPage>();
         }
         public MockSite(int _id)
             : base(_id)
@@ -22,5 +23,7 @@ namespace MockCMS.Models
         public IList<ItemType> ItemTypes { get; set; }
 
         public IList<ItemPropertyType> ItemPropertyTypes { get; set; }
+
+        public IList<MockPage> Pages { get; set; }
     }
 }

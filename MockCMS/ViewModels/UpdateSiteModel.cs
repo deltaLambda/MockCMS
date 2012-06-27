@@ -8,11 +8,11 @@ namespace MockCMS.ViewModels
 {
     public class UpdateSiteModel
     {
-        public UpdateSiteModel(int id)
+        public UpdateSiteModel()
         {
-            Id = id;
             ItemTypes = new List<ItemTypeEditModel>();
             PropertyTypes = new List<ItemPropertyTypeModel>();
+            Pages = new List<MockPageEditModel>();
         }
         public int Id { get; set; }
             
@@ -20,6 +20,8 @@ namespace MockCMS.ViewModels
         public string Name { get; set; }
 
         public IList<ItemTypeEditModel> ItemTypes { get; set; }
+
+        public IList<MockPageEditModel> Pages { get; set; }
 
         public IList<ItemPropertyTypeModel> PropertyTypes { get; set; }
     }

@@ -54,7 +54,6 @@ namespace MockCMS
             var kernel = new StandardKernel();
 
             kernel.Load(Assembly.GetExecutingAssembly());
-            kernel.Bind<IMockSiteRepository>().To<FakeMockSiteRepository>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectResolver(kernel);
             return kernel;

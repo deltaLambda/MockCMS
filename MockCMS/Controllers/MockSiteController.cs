@@ -12,19 +12,34 @@ namespace MockCMS.Controllers
 {
     public class MockSiteController : ApiController
     {
-        private readonly IMockSiteRepository repository;
-        public MockSiteController(IMockSiteRepository _repository)
+        private readonly IRepository<MockSite> repository;
+        public MockSiteController(IRepository<MockSite> _repository)
         {
             repository = _repository;
         }
         public HttpResponseMessage Put(CreateSiteModel newSiteValues)
         {
-            throw new NotImplementedException();
-        }
+            var site = new MockSite();
+            site.Name = newSiteValues.Name;
 
+            repository.Create(site);
+            var response = Request.CreateResponse(HttpStatusCode.Created);
+
+            return response;
+        }
         public HttpResponseMessage Post(UpdateSiteModel updateModel)
         {
-            throw new NotImplementedException();
+            var site = new MockSite(updateModel.Id);
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            return response;
+        }
+
+        public HttpResponseMessage Delete(DeleteSiteModel deleteSiteModel)
+        {
+            var site = repository.Get(deleteSiteModel.Id);
+            repository.Delete(site);
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            return response;
         }
     }
 }
