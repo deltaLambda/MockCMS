@@ -27,6 +27,7 @@ namespace MockCMS.Tests
             testSite = new MockSite();
             testSite.Name = "Test Site";
         }
+        //Creation Tests
         [Test]
         public void CanCreateSite()
         {
@@ -106,6 +107,58 @@ namespace MockCMS.Tests
             //Assert - Make sure that the site and all things that were attached to it aer no longer in the repository-like.
             Assert.IsNull(repository.Get(siteToBeDeleted.GetId().Value));
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        }
+        //Modification Tests
+        [Test]
+        public void CanChangeSiteName()
+        {
+            //Arrange 
+            repository.Create(testSite);
+            var siteToBeModified = repository.Get().First();
+            var originalSiteName = siteToBeModified.Name;
+            var modifiedSiteName = "Modified Site Name";
+            var modifiedSiteValues = new UpdateSiteModel {Id = siteToBeModified.GetId().Value, Name = modifiedSiteName};
+            //Act
+            var response = controller.Post(modifiedSiteValues);
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK,response.StatusCode );
+            Assert.AreEqual(modifiedSiteName, siteToBeModified.Name);
+        }
+        [Test]
+        public void CanChangeItemTypeName()
+        {
+            //Arrange 
+            repository.Create(testSite);
+            var siteToBeModifed = repository.Get().First();
+            var itemType = new ItemType(1);
+            itemType.Name = "New Item Type";
+            siteToBeModifed.ItemTypes.Add(itemType);
+            var itemTypeNewValues = new UpdateSiteModel {Id = siteToBeModifed.GetId().Value};
+            var newItemTypeName = "Changed Name";
+            itemTypeNewValues.ItemTypes.Add(new ItemTypeEditModel{ Id = itemType.GetId().Value, Name = newItemTypeName});
+            //Act
+            var response = controller.Post(itemTypeNewValues);
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual( newItemTypeName, itemType.Name);
+        }
+        [Test]
+        public void CanChangePageName()
+        {
+            //Arrange
+            repository.Create(testSite);
+            var siteToBeModified = repository.Get().First();
+            var page = new MockPage(1);
+            page.Name = "Unchanged Name";
+            var newName = "Changed Name";
+            siteToBeModified.Pages.Add(page);
+            var newPageValues = new UpdateSiteModel {Id = siteToBeModified.GetId().Value};
+            newPageValues.Pages.Add(new MockPageEditModel { Id = page.GetId().Value, Name = newName});
+            //Act
+            var response = controller.Post(newPageValues);
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual(newName, page.Name);
         }
     }
 }

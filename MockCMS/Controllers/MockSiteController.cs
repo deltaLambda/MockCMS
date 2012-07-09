@@ -30,6 +30,7 @@ namespace MockCMS.Controllers
         {
             var site = repository.Get(updateModel.Id);
             //This is where we do the updating. 
+            //This section for the newly created values.
             foreach (var itemTypeModel in updateModel.ItemTypes.Where(itemType => itemType.Id == 0))
             {
                 //Determine whether or not the list of item types is empty to determine the key for the new item type.
@@ -58,7 +59,13 @@ namespace MockCMS.Controllers
                 newPage.Html = mockPageModel.Html;
                 newPage.Name = mockPageModel.Name;
                 site.Pages.Add(newPage);
-            }           //Tell the Repository to commit the changes
+            }           
+            //This section for the values that we are going to update.
+            foreach( var itemTypeModel in updateModel.ItemTypes.Where(itemType => itemType.Id > 0))
+            {
+                var itemTypeToBeMofidied = site.ItemTypes.Where(itemType => itemType.GetId().Value == itemTypeModel.Id);
+            }
+            //Tell the Repository to commit the changes
             repository.Update(site);
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
