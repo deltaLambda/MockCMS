@@ -9,9 +9,8 @@ namespace MockCMS.Models
     {
         public ItemType(int _id) : base(_id)
         {
-            Properties = new Dictionary<string,ItemPropertyType>();
+            Properties = new Dictionary<string,ItemProperty>();
         }
-        public IDictionary<string, ItemPropertyType> Properties { get; set; }
-
+        public IDictionary<string, ItemProperty> Properties { get; set; }
     }
 }

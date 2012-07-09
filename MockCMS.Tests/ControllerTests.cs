@@ -24,7 +24,7 @@ namespace MockCMS.Tests
             repository = new FakeMockSiteRepository();
             controller = new MockSiteController(repository);
             controller.Request = new System.Net.Http.HttpRequestMessage();
-            testSite = new MockSite(1);
+            testSite = new MockSite();
             testSite.Name = "Test Site";
         }
         [Test]
@@ -38,31 +38,35 @@ namespace MockCMS.Tests
 
             //Assert - Verify that a site has been created with the specified values.
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-            Assert.IsTrue(repository.Get().Where(site => site.Name == newSiteValues.Name).Any());
+            Assert.IsTrue(repository.Get().Any(site => site.Name == newSiteValues.Name));
         }
         [Test]
         public void CanAddItemTypeToSite()
         {
             //Arrange - Specify Values for new item type. Make sure a site already exists within the repo.
             repository.Create(testSite);
-            var updateModel = new UpdateSiteModel{ Id = testSite.GetId().Value };
+            var siteBeingUpdated = repository.Get().First();
+            var updateModel = new UpdateSiteModel{ Id = siteBeingUpdated.GetId().Value};
             updateModel.ItemTypes.Add(new ItemTypeEditModel { Name = "Test Item Type" });
 
             //Act - Command the controller to update the site given the update values.
             var response = controller.Post(updateModel);
 
             //Assert
+            var updatedSite = repository.Get(updateModel.Id);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            Assert.IsNotEmpty(testSite.ItemTypes);
-            Assert.AreEqual("Test Item Type", testSite.ItemTypes.First().Name);
+            Assert.IsNotEmpty(siteBeingUpdated.ItemTypes);
+            Assert.AreEqual("Test Item Type", siteBeingUpdated.ItemTypes.First().Name);
         }
         [Test]
         public void CanAddItemTypeWithPropertiesToSite()
         {
             //Arrange - Specify Values for new item type. 
             repository.Create(testSite);
-            var updateModel = new UpdateSiteModel { Id = testSite.GetId().Value };
+            var siteBeingUpdated = repository.Get().First();
+            var updateModel = new UpdateSiteModel { Id = siteBeingUpdated.GetId().Value };
             var testItemType = new ItemTypeEditModel { Name = "Test Item Type" };
+            
             testItemType.Properties.Add(new ItemPropertyEditModel { Name = "Test Item Property", PropertyType = 1});
             updateModel.ItemTypes.Add(testItemType);
 
@@ -71,22 +75,23 @@ namespace MockCMS.Tests
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            Assert.IsNotEmpty(testSite.ItemTypes.First().Properties);
-            Assert.AreEqual("Test Item Type", testSite.ItemTypes.First().Properties.First().Key);
+            Assert.IsNotEmpty(siteBeingUpdated.ItemTypes.First().Properties);
+            Assert.AreEqual("Test Item Type", siteBeingUpdated.ItemTypes.First().Name);
         }
         [Test]
         public void CanAddPageToSite()
         {
             //Arrange - Specify values for new page. 
             repository.Create(testSite);
-            var pageModel = new MockPageEditModel { Id = 1 };
-            var siteModel = new UpdateSiteModel { Id = testSite.GetId().Value};
+            var pageModel = new MockPageEditModel ();
+            var siteToBeTested = repository.Get().First();
+            var siteModel = new UpdateSiteModel { Id = siteToBeTested.GetId().Value};
             siteModel.Pages.Add(pageModel);
             //Act - Command the controller to update the site with the page's values.
             var response = controller.Post(siteModel);
 
             //Assert - Make sure that the page is contained within the site in the repository. 
-            Assert.IsNotEmpty(testSite.Pages);
+            Assert.IsNotEmpty(siteToBeTested.Pages);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
         [Test]
@@ -94,11 +99,12 @@ namespace MockCMS.Tests
         {
             //Arrange - Add the site to the repository.
             repository.Create(testSite);
+            var siteToBeDeleted = repository.Get().First();
             //Act - Invoke the controller's delete method.
-            var deleteSiteModel = new DeleteSiteModel { Id = testSite.GetId().Value };
+            var deleteSiteModel = new DeleteSiteModel { Id = siteToBeDeleted.GetId().Value };
             var response = controller.Delete(deleteSiteModel);
             //Assert - Make sure that the site and all things that were attached to it aer no longer in the repository-like.
-            Assert.IsNull(repository.Get(testSite.GetId().Value));
+            Assert.IsNull(repository.Get(siteToBeDeleted.GetId().Value));
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
     }

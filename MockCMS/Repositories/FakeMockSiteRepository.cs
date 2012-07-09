@@ -22,7 +22,13 @@ namespace MockCMS.Repositories
 
         public void Create(MockSite newSite)
         {
-            sites.Add(newSite);
+            MockSite createdSite;
+            if(sites.Any())
+                createdSite = new MockSite(sites.Max(site => site.GetId().Value == null ? 0 : site.GetId().Value) + 1);
+            else
+                createdSite = new MockSite(0);
+            createdSite.Name = newSite.Name;
+            sites.Add(createdSite);
         }
 
         public void Delete(MockSite siteToBeRemoved)

@@ -18,6 +18,7 @@ namespace MockCMS.Models
         {
             ItemTypes = new List<ItemType>();
             ItemPropertyTypes = new List<ItemPropertyType>();
+            Pages = new List<MockPage>();
         }
 
         public IList<ItemType> ItemTypes { get; set; }

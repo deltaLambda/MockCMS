@@ -5,10 +5,8 @@ using System.Web;
 
 namespace MockCMS.Models
 {
-    public class ItemPropertyType : Model
+    public enum ItemPropertyType
     {
-        public ItemPropertyType(int _id)
-            : base(_id)
-        { }
+        Number, Money, Text
     }
 }
