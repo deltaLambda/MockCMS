@@ -17,16 +17,16 @@ namespace MockCMS.Repositories
         }
         public MockSite Get(int id)
         {
-            return sites.Where(site => site.GetId().Equals(id)).SingleOrDefault();
+            return sites.Where(site => site.Id == id).SingleOrDefault();
         }
 
         public void Create(MockSite newSite)
         {
             MockSite createdSite;
             if(sites.Any())
-                createdSite = new MockSite(sites.Max(site => site.GetId().Value == null ? 0 : site.GetId().Value) + 1);
+                createdSite = new MockSite(sites.Max(site => site.Id) + 1);
             else
-                createdSite = new MockSite(0);
+                createdSite = new MockSite(1);
             createdSite.Name = newSite.Name;
             sites.Add(createdSite);
         }

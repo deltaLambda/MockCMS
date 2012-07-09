@@ -47,7 +47,7 @@ namespace MockCMS.Tests
             //Arrange - Specify Values for new item type. Make sure a site already exists within the repo.
             repository.Create(testSite);
             var siteBeingUpdated = repository.Get().First();
-            var updateModel = new UpdateSiteModel{ Id = siteBeingUpdated.GetId().Value};
+            var updateModel = new UpdateSiteModel{ Id = siteBeingUpdated.Id};
             updateModel.ItemTypes.Add(new ItemTypeEditModel { Name = "Test Item Type" });
 
             //Act - Command the controller to update the site given the update values.
@@ -65,7 +65,7 @@ namespace MockCMS.Tests
             //Arrange - Specify Values for new item type. 
             repository.Create(testSite);
             var siteBeingUpdated = repository.Get().First();
-            var updateModel = new UpdateSiteModel { Id = siteBeingUpdated.GetId().Value };
+            var updateModel = new UpdateSiteModel { Id = siteBeingUpdated.Id };
             var testItemType = new ItemTypeEditModel { Name = "Test Item Type" };
             
             testItemType.Properties.Add(new ItemPropertyEditModel { Name = "Test Item Property", PropertyType = 1});
@@ -86,7 +86,7 @@ namespace MockCMS.Tests
             repository.Create(testSite);
             var pageModel = new MockPageEditModel ();
             var siteToBeTested = repository.Get().First();
-            var siteModel = new UpdateSiteModel { Id = siteToBeTested.GetId().Value};
+            var siteModel = new UpdateSiteModel { Id = siteToBeTested.Id};
             siteModel.Pages.Add(pageModel);
             //Act - Command the controller to update the site with the page's values.
             var response = controller.Post(siteModel);
@@ -102,10 +102,10 @@ namespace MockCMS.Tests
             repository.Create(testSite);
             var siteToBeDeleted = repository.Get().First();
             //Act - Invoke the controller's delete method.
-            var deleteSiteModel = new DeleteSiteModel { Id = siteToBeDeleted.GetId().Value };
+            var deleteSiteModel = new DeleteSiteModel { Id = siteToBeDeleted.Id };
             var response = controller.Delete(deleteSiteModel);
             //Assert - Make sure that the site and all things that were attached to it aer no longer in the repository-like.
-            Assert.IsNull(repository.Get(siteToBeDeleted.GetId().Value));
+            Assert.IsNull(repository.Get(siteToBeDeleted.Id));
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
         //Modification Tests
@@ -117,7 +117,7 @@ namespace MockCMS.Tests
             var siteToBeModified = repository.Get().First();
             var originalSiteName = siteToBeModified.Name;
             var modifiedSiteName = "Modified Site Name";
-            var modifiedSiteValues = new UpdateSiteModel {Id = siteToBeModified.GetId().Value, Name = modifiedSiteName};
+            var modifiedSiteValues = new UpdateSiteModel {Id = siteToBeModified.Id, Name = modifiedSiteName};
             //Act
             var response = controller.Post(modifiedSiteValues);
             //Assert
@@ -133,9 +133,9 @@ namespace MockCMS.Tests
             var itemType = new ItemType(1);
             itemType.Name = "New Item Type";
             siteToBeModifed.ItemTypes.Add(itemType);
-            var itemTypeNewValues = new UpdateSiteModel {Id = siteToBeModifed.GetId().Value};
+            var itemTypeNewValues = new UpdateSiteModel {Id = siteToBeModifed.Id};
             var newItemTypeName = "Changed Name";
-            itemTypeNewValues.ItemTypes.Add(new ItemTypeEditModel{ Id = itemType.GetId().Value, Name = newItemTypeName});
+            itemTypeNewValues.ItemTypes.Add(new ItemTypeEditModel{ Id = itemType.Id, Name = newItemTypeName});
             //Act
             var response = controller.Post(itemTypeNewValues);
             //Assert
@@ -152,8 +152,8 @@ namespace MockCMS.Tests
             page.Name = "Unchanged Name";
             var newName = "Changed Name";
             siteToBeModified.Pages.Add(page);
-            var newPageValues = new UpdateSiteModel {Id = siteToBeModified.GetId().Value};
-            newPageValues.Pages.Add(new MockPageEditModel { Id = page.GetId().Value, Name = newName});
+            var newPageValues = new UpdateSiteModel {Id = siteToBeModified.Id};
+            newPageValues.Pages.Add(new MockPageEditModel { Id = page.Id, Name = newName});
             //Act
             var response = controller.Post(newPageValues);
             //Assert

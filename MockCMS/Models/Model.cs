@@ -7,17 +7,12 @@ namespace MockCMS.Models
 {
     public class Model
     {
-        private int? id;
-
         public Model() { }
         public Model(int _id)
                 {
-            id = _id;
+            Id = _id;
         }
         public string Name { get; set; }
-        public int? GetId()
-        {
-            return id;
-        }
-    }
+        public int Id { get; private set; }
+   }
 }
